@@ -5,3 +5,8 @@ mysqlclient>=2.1
 python-dotenv>=1.0
 django-filter
 gunicorn
+Django>=4.2
+djangorestframework
+djangorestframework-simplejwt
+mysqlclient
+django-filter
