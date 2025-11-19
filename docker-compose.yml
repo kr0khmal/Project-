@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_rental
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-rentaldb}
+      MYSQL_USER: ${MYSQL_USER:-rental_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-rental_pass}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-rental_pass}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  web:
+    build: .
+    container_name: rental_web
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+volumes:
+  mysql_data:
