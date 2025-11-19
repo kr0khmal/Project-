@@ -1,1 +1,6 @@
 path("api/listings/", include("listings.urls")),
+path("api/search/", include("search_history.urls")),
+path("api/views/", include("views_history.urls")),
+path("api/search/", include("search.urls")),
+path("api/reviews/", include("reviews.urls")),
+path("api/bookings/", include("bookings.urls")),
