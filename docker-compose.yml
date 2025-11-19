@@ -1,31 +1,32 @@
-version: '3.9'
+version: "3.9"
+
 services:
   db:
-    image: mysql:8.0
-    container_name: mysql_rental
-    restart: unless-stopped
+    image: mysql:8
+    restart: always
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-rentaldb}
-      MYSQL_USER: ${MYSQL_USER:-rental_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-rental_pass}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-rental_pass}
-    volumes:
-      - mysql_data:/var/lib/mysql
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
 
   web:
     build: .
-    container_name: rental_web
-    restart: unless-stopped
-    env_file:
-      - .env
+    restart: always
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
-    volumes:
-      - .:/app
+    env_file:
+      - .env
 
 volumes:
   mysql_data:
