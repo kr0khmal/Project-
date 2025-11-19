@@ -1,6 +1,17 @@
-    __init__.py
-    models.py
-    serializers.py
-    views.py
-    permissions.py
-    urls.py
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class User(AbstractUser):
+    ROLE_CHOICES = (
+        ("tenant", "Tenant"),       # арендатор
+        ("landlord", "Landlord"),   # арендодатель
+    )
+
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="tenant")
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+
+    def __str__(self):
+        return f"{self.email} ({self.role})"
